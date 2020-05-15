@@ -13,6 +13,8 @@ class UserController{
             btn.disabled = true;
             let values = this.getValues();
 
+            if(!values) return false;
+
             this.getPhoto().then((content)=>{
                 values.photo = content; 
                 this.addLine(values);
@@ -79,6 +81,8 @@ class UserController{
 
     addLine(dataUser){
         let tr = document.createElement('tr');
+        //converte o objeto dataUser para uma string em JSON
+        tr.dataset.user = JSON.stringify(dataUser);
         tr.innerHTML =  `
             <td><img src="${dataUser.photo}" alt="User Image" class="img-circle img-sm"></td>
             <td>${dataUser.name}</td>
@@ -89,7 +93,23 @@ class UserController{
               <button type="button" class="btn btn-primary btn-xs btn-flat">Editar</button>
               <button type="button" class="btn btn-danger btn-xs btn-flat">Excluir</button>
             </td>`;
-        //template string
         this.tableEl.appendChild(tr);
+        this.updateCount();
+    }
+
+    updateCount(){
+        let numberUsers = 0;
+        let numberAdmin = 0;
+
+        //percorre todas as linhas do tbody
+        [...this.tableEl.children].forEach(tr=>{
+            numberUsers++;
+            let user = JSON.parse(tr.dataset.user);
+           
+            if(user._type) numberAdmin++;
+        });
+
+        document.querySelector('#number-users').innerHTML = numberUsers;
+        document.querySelector('#number-adms').innerHTML = numberAdmin;
     }
 }
