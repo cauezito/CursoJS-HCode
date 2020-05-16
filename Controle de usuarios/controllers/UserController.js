@@ -145,7 +145,7 @@ class UserController{
             <td>${Util.dateFormat(dataUser.register)}</td>
             <td>
               <button type="button" class="btn btn-primary btn-xs btn-edit btn-flat">Editar</button>
-              <button type="button" class="btn btn-danger btn-xs btn-flat">Excluir</button>
+              <button type="button" class="btn btn-danger btn-xs btn-delete btn-flat">Excluir</button>
             </td>`;
         
         this.addEventsTr(tr);
@@ -183,6 +183,13 @@ class UserController{
             }
             this.formUpdateEl.querySelector(".photo").src = json._photo;
             this.showPanelUpdate();
+        });
+
+        tr.querySelector('.btn-delete').addEventListener("click", e =>{
+            if(confirm("Deseja excluir?")){
+                tr.remove();
+                this.updateCount();
+            }
         });
     }
 
