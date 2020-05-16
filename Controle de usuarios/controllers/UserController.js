@@ -168,8 +168,8 @@ class UserController{
     getUsersStorage(){
         let users = [];
         //Se já houver conteúdo gravado, recupera e transforma em array
-        if(sessionStorage.getItem("users")){
-            users = JSON.parse(sessionStorage.getItem("users"));
+        if(localStorage.getItem("users")){
+            users = JSON.parse(localStorage.getItem("users"));
         }
 
         return users;
@@ -179,7 +179,7 @@ class UserController{
        let users = this.getUsersStorage();
         users.push(data);
         //sobrescreve e converte para string
-        sessionStorage.setItem("users", JSON.stringify(users));
+        localStorage.setItem("users", JSON.stringify(users));
     }
 
     addEventsTr(tr){
