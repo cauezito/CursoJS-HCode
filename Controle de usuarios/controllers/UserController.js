@@ -5,6 +5,7 @@ class UserController{
         this.tableEl = document.getElementById(tableId);
         this.onSubmit();
         this.onEdit();
+        this.selectAllUsers();
     }
 
     onEdit(){
@@ -71,6 +72,8 @@ class UserController{
 
             this.getPhoto(this.formEl).then((content)=>{
                 values.photo = content; 
+                //converte o objeto dataUser para uma string em JSON
+                this.insertStorage(values);
                 this.addLine(values);
                 this.formEl.reset();
                 btn.disabled = false;
@@ -135,7 +138,7 @@ class UserController{
 
     addLine(dataUser){
         let tr = document.createElement('tr');
-        //converte o objeto dataUser para uma string em JSON
+       
         tr.dataset.user = JSON.stringify(dataUser);
         tr.innerHTML =  `
             <td><img src="${dataUser.photo}" alt="User Image" class="img-circle img-sm"></td>
@@ -151,6 +154,32 @@ class UserController{
         this.addEventsTr(tr);
         this.tableEl.appendChild(tr);
         this.updateCount();
+    }
+
+    selectAllUsers(){
+        let users = this.getUsersStorage();
+        users.forEach(dataUser =>{
+            let user = new User();
+            user.loadFromJSON(dataUser);
+            this.addLine(user);
+        });
+    }
+
+    getUsersStorage(){
+        let users = [];
+        //Se já houver conteúdo gravado, recupera e transforma em array
+        if(sessionStorage.getItem("users")){
+            users = JSON.parse(sessionStorage.getItem("users"));
+        }
+
+        return users;
+    }
+
+    insertStorage(data){
+       let users = this.getUsersStorage();
+        users.push(data);
+        //sobrescreve e converte para string
+        sessionStorage.setItem("users", JSON.stringify(users));
     }
 
     addEventsTr(tr){
