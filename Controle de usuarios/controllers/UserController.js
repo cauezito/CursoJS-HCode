@@ -33,6 +33,7 @@ class UserController{
                     }
                     let user = new User();
                     user.loadFromJSON(result);
+                    user.save();
                     this.getTr(user, tr);
                     this.updateCount();                     
                     this.formUpdateEl.reset();
@@ -60,8 +61,7 @@ class UserController{
 
             this.getPhoto(this.formEl).then((content)=>{
                 values.photo = content; 
-                //converte o objeto dataUser para uma string em JSON
-                this.insertStorage(values);
+                values.save();
                 this.addLine(values);
                 this.formEl.reset();
                 btn.disabled = false;
@@ -167,13 +167,6 @@ class UserController{
         }
 
         return users;
-    }
-
-    insertStorage(data){
-       let users = this.getUsersStorage();
-        users.push(data);
-        //sobrescreve e converte para string
-        localStorage.setItem("users", JSON.stringify(users));
     }
 
     addEventsTr(tr){

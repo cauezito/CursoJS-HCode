@@ -1,5 +1,6 @@
 class User{
     constructor(name, gender, birth, country, email, password, photo, type){
+        this._id;
         this._name = name;
         this._gender = gender;
         this._birth = birth;
@@ -9,6 +10,9 @@ class User{
         this._photo = photo;
         this._type = type;
         this._register = new Date();
+    }
+    get id(){
+        return this._id;
     }
 
     get name(){
@@ -85,5 +89,39 @@ class User{
             }
            
         }
+    }
+
+    getNewId(){
+        if(!window.id) window.id = 0;
+        id++;
+        return id;
+    }
+
+    save(){
+        let users = User.getUsers();
+        if(this.id > 0){
+            users.map(u=>{
+                if(u._id == this.id){
+                   Object.assign(u,this);
+                }
+                return u;
+            });
+           
+        } else {
+            this._id = this.getNewId();
+            users.push(this);
+        }    
+        //sobrescreve e converte para string
+        localStorage.setItem("users", JSON.stringify(users));    
+    }
+
+    static getUsers(){
+        let users = [];
+        //Se já houver conteúdo gravado, recupera e transforma em array
+        if(localStorage.getItem("users")){
+            users = JSON.parse(localStorage.getItem("users"));
+        }
+
+        return users;
     }
 }
