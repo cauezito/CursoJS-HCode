@@ -168,7 +168,7 @@ class UserController{
                 let field = this.formUpdateEl.querySelector("[name=" + name.replace("_", "") + "]");              
 
                 if(field){
-                   
+                  
                     switch(field.type){
                         case 'file':
                             //ignora as instruções restantes e continua
